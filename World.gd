@@ -73,20 +73,20 @@ func _process(delta):
 	
 func _physics_process(delta):
 	get_input()
-	$CharacterBody3D.move_and_slide()
+	$Character.move_and_slide()
 	
 func get_input():
 	var input_direction = Input.get_vector("left", "right", "forward", "back")
 	var heightInput = Input.get_axis("down", "up")
-	$CharacterBody3D.velocity = Vector3(input_direction.x, heightInput, input_direction.y) * 400
+	$Character.velocity = Vector3(input_direction.x, heightInput, input_direction.y) * 400
 	
 func _input(event):
 	if event.is_action_pressed("left_click"):
 		var space_state = get_world_3d().direct_space_state
 		var mouse_position = get_viewport().get_mouse_position()
 		var params = PhysicsRayQueryParameters3D.new()
-		params.from = $CharacterBody3D/Camera3D.project_ray_origin(mouse_position)
-		params.to = params.from + $CharacterBody3D/Camera3D.project_ray_normal(mouse_position) * 1000
+		params.from = $Character/Camera3D.project_ray_origin(mouse_position)
+		params.to = params.from + $Character/Camera3D.project_ray_normal(mouse_position) * 1000
 		var result = space_state.intersect_ray(params)
 		if result:
 			var scene = load("res://trainStation.tscn")
