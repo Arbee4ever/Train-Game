@@ -4,13 +4,13 @@ var noise = FastNoiseLite.new()
 var chunkSize = Vector2(200, 200)
 
 func _init():
-	noise.seed = 1
-	noise.frequency = 0.005
+	noise.seed = randi()
+	noise.frequency = 0.0025
 
 func _ready():
-	var chunkNum = 4;
+	var chunkNum = 4
 	for i in range(chunkNum):
-		var coords = Vector2(i%(int(ceil(chunkNum/2.0))), i/(int(ceil(chunkNum/2.0))))
+		var coords = Vector2(i%int(ceil(sqrt(chunkNum))), i/int(ceil(sqrt(chunkNum))))
 		coords.x *= chunkSize.x
 		coords.y *= chunkSize.x
 		noise.offset = Vector3(coords.x, coords.y, 0)
@@ -21,7 +21,7 @@ func _ready():
 		var shaderMat = StandardMaterial3D.new()
 		var imageTexture = ImageTexture.create_from_image(noise.get_image(chunkSize.x, chunkSize.y))
 		shaderMat.albedo_texture = imageTexture
-		chunk.material_override = shaderMat
+		#chunk.material_override = shaderMat
 	
 		add_child(chunk)
 	
@@ -59,16 +59,26 @@ func generate_chunk():
 	mesh_instance.create_trimesh_collision()
 	return mesh_instance
 
+#Basic Day/Night Cycle
+"""var switch = true
+var rate = 0.025
 func _process(delta):
-	pass
+	if switch:
+		$DirectionalLight3D.light_energy -= rate * delta
+	else:
+		$DirectionalLight3D.light_energy += rate * delta
+	
+	if $DirectionalLight3D.light_energy >= 1 || $DirectionalLight3D.light_energy <= 0:
+		switch = !switch"""
 	
 func _physics_process(delta):
 	get_input()
 	$CharacterBody3D.move_and_slide()
 	
 func get_input():
-	var input_direction = Input.get_vector("left", "right", "up", "down")
-	$CharacterBody3D.velocity = Vector3(input_direction.x, 0, input_direction.y) * 400
+	var input_direction = Input.get_vector("left", "right", "forward", "back")
+	var heightInput = Input.get_axis("down", "up")
+	$CharacterBody3D.velocity = Vector3(input_direction.x, heightInput, input_direction.y) * 400
 	
 func _input(event):
 	if event.is_action_pressed("left_click"):
