@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bv7lmvmnsd6u2"]
 
-[ext_resource type="Script" path="res://World.gd" id="1_ve1v0"]
+[ext_resource type="Script" path="res://scripts/World.gd" id="1_kw5et"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j2h8r"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -21,7 +21,7 @@ points = PackedVector3Array(0.457871, 0.198079, 0.0157824, -0.48874, -0.0916874,
 
 [node name="World" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0320663, -0.234894, 0.0331039)
-script = ExtResource("1_ve1v0")
+script = ExtResource("1_kw5et")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_vftr8")
@@ -31,7 +31,7 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Character" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 200, 100)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 200, 200)
 
 [node name="Camera3D" type="Camera3D" parent="Character"]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
@@ -43,3 +43,26 @@ mesh = SubResource("SphereMesh_kxmm6")
 [node name="Collider" type="CollisionShape3D" parent="Character"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_wbd0j")
+
+[node name="Button" type="Button" parent="."]
+offset_right = 108.0
+offset_bottom = 31.0
+toggle_mode = true
+text = "Train Station"
+metadata/_edit_use_anchors_ = true
+
+[node name="Button2" type="Button" parent="."]
+offset_top = 31.0
+offset_right = 108.0
+offset_bottom = 62.0
+toggle_mode = true
+text = "Train Station"
+metadata/_edit_use_anchors_ = true
+
+[node name="Button3" type="Button" parent="."]
+offset_top = 62.0
+offset_right = 108.0
+offset_bottom = 93.0
+toggle_mode = true
+text = "Train Station"
+metadata/_edit_use_anchors_ = true

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cu0j6m04vucoh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hmg6c"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_c2iy0"]
+
+[node name="TrainStation" type="Node3D"]
+
+[node name="Tracks" type="MeshInstance3D" parent="."]
+transform = Transform3D(25, 0, 0, 0, 2, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("BoxMesh_hmg6c")
+
+[node name="House" type="MeshInstance3D" parent="."]
+transform = Transform3D(25, 0, 0, 0, 10, 0, 0, 0, 10, 0, 3.5, -12)
+mesh = SubResource("BoxMesh_c2iy0")
