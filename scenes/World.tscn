@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bv7lmvmnsd6u2"]
+[gd_scene load_steps=9 format=3 uid="uid://bv7lmvmnsd6u2"]
 
 [ext_resource type="Script" path="res://scripts/World.gd" id="1_kw5et"]
+[ext_resource type="Script" path="res://scripts/inventory.gd" id="2_7ndpr"]
+[ext_resource type="Script" path="res://scripts/builder.gd" id="3_4yre7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j2h8r"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -31,6 +33,7 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Character" type="CharacterBody3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 200, 200)
 
 [node name="Camera3D" type="Camera3D" parent="Character"]
@@ -44,25 +47,11 @@ mesh = SubResource("SphereMesh_kxmm6")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_wbd0j")
 
-[node name="Button" type="Button" parent="."]
-offset_right = 108.0
-offset_bottom = 31.0
-toggle_mode = true
-text = "Train Station"
-metadata/_edit_use_anchors_ = true
+[node name="Inventory" type="Node2D" parent="."]
+script = ExtResource("2_7ndpr")
 
-[node name="Button2" type="Button" parent="."]
-offset_top = 31.0
-offset_right = 108.0
-offset_bottom = 62.0
-toggle_mode = true
-text = "Train Station"
-metadata/_edit_use_anchors_ = true
+[node name="Builder" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_4yre7")
 
-[node name="Button3" type="Button" parent="."]
-offset_top = 62.0
-offset_right = 108.0
-offset_bottom = 93.0
-toggle_mode = true
-text = "Train Station"
-metadata/_edit_use_anchors_ = true
+[connection signal="item_selected" from="Inventory" to="Builder" method="_on_inventory_item_selected"]

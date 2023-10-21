@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://drwgbhj1x3bhj"]
+
+[ext_resource type="Script" path="res://scripts/marker.gd" id="1_8gd1h"]
+[ext_resource type="Texture2D" uid="uid://d0feurh3wsij5" path="res://icon.svg" id="1_k5d8b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_28t5a"]
+size = Vector3(10, 10, 10)
+
+[node name="marker" type="Node3D" groups=["track_markers"]]
+script = ExtResource("1_8gd1h")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -0.00813246, 0.036418, -0.0179329)
+billboard = 1
+no_depth_test = true
+texture = ExtResource("1_k5d8b")
+
+[node name="Collider" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0295696, -0.0364165, 0.0350323)
+shape = SubResource("BoxShape3D_28t5a")
+
+[connection signal="input_event" from="Collider" to="." method="_on_collider_input_event"]
