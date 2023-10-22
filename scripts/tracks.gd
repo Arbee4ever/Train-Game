@@ -44,22 +44,19 @@ func _update_multimesh():
 		var transform = Transform3D(basis, position)
 		mm.set_instance_transform(i, transform)
 
-
 func _on_curve_changed():
 	is_dirty = true
-	
-var drag_start := Vector3.ZERO
-func _place(location: Vector3, rotation_degrees: Vector3):
-	print(drag_start)
-	if drag_start != Vector3.ZERO:
-		print("YES")
-		curve.add_point(location)
-		var marker = add_marker(location)
+
+func _place(location: Vector3, rotation_degrees: Vector3, path = null, point = -1):
+	if path != null and point != -1:
+		path.curve.add_point(path.to_local(location), Vector3.ZERO, Vector3.ZERO, point)
+		var marker = path.add_marker(path.to_local(location))
 		marker.visible = true
-		
-func _start_drag(position):
-	print("YES1")
-	drag_start = position
+	else:
+		var building = self.duplicate()
+		building.position = location
+		building.rotation_degrees = rotation_degrees
+		building._add_markers()
 
 func _add_markers():
 	for i in range(0, curve.point_count):
@@ -69,9 +66,10 @@ func add_marker(position):
 	var sprite = load("res://assets/marker.tscn").instantiate()
 	sprite.visible = false
 	sprite.position = position
-	self.add_child(sprite)
+	add_child(sprite)
 	return sprite
 	
 func toggle_track_build_mode(build_mode):
 	for node in get_tree().get_nodes_in_group("track_markers"):
 		node.toggle_visibility(build_mode)
+

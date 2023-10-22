@@ -7,6 +7,7 @@
 size = Vector3(10, 10, 10)
 
 [node name="marker" type="Node3D" groups=["track_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0568085, 0.21051, -0.0958939)
 script = ExtResource("1_8gd1h")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

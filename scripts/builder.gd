@@ -44,9 +44,10 @@ func _on_inventory_item_selected(item):
 	add_child(preview)
 
 func _place(node: Path3D = null, point = -1):
-	if point != null and node is Path3D:
-		node.curve.add_point(node.to_local(raycast().position))
-	place.emit(position, Vector3(0, rotation_state, 0))
+	if point != -1 and node != null:
+		preview._place(position, Vector3(0, rotation_state, 0), node, point)
+	else:
+		preview._place(position, Vector3(0, rotation_state, 0))
 
 func raycast():
 	var space_state = get_world_3d().direct_space_state

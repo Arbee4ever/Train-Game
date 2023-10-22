@@ -2,24 +2,24 @@
 
 [ext_resource type="Script" path="res://scripts/tracks.gd" id="1_s6ugf"]
 
-[sub_resource type="Curve3D" id="Curve3D_sbbbi"]
+[sub_resource type="Curve3D" id="Curve3D_5d1n7"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, 10),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, -10),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
 
-[sub_resource type="BoxMesh" id="BoxMesh_32vcl"]
+[sub_resource type="BoxMesh" id="BoxMesh_76rp0"]
 size = Vector3(3, 0.1, 0.25)
 
-[sub_resource type="MultiMesh" id="MultiMesh_2gqoj"]
+[sub_resource type="MultiMesh" id="MultiMesh_080bx"]
 transform_format = 1
-instance_count = 13
-mesh = SubResource("BoxMesh_32vcl")
-buffer = PackedFloat32Array(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -9.24683, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -7.75044, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -6.2504, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -4.75001, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -3.25003, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -1.75, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -0.250002, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 1.25002, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 2.75003, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 4.25006, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 5.74997, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 7.2503, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 8.75064)
+instance_count = 20
+mesh = SubResource("BoxMesh_76rp0")
+buffer = PackedFloat32Array(0, 0, -1, 0.749718, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 2.25511, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 3.74981, 0, 1, 0, 0, 1, 0, 0, -30, 3.81325e-05, 0, -1, 5.24991, 0, 1, 0, 0, 1, 0, 3.81325e-05, -30, 0, 0, -1, 6.74987, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 8.24991, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 9.74992, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 11.2499, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 12.75, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 14.25, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 15.75, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 17.25, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 18.7501, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 20.2501, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 21.7501, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 23.2501, 0, 1, 0, 0, 1, 0, 0, -30, 1.90603e-05, 0, -1, 24.7501, 0, 1, 0, 0, 1, 0, 1.90603e-05, -30, 0, 0, -1, 26.2502, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 27.7449, 0, 1, 0, 0, 1, 0, 0, -30, 0, 0, -1, 29.2503, 0, 1, 0, 0, 1, 0, 0, -30)
 
 [node name="Track" type="Path3D" groups=["tracks"]]
-curve = SubResource("Curve3D_sbbbi")
+curve = SubResource("Curve3D_5d1n7")
 script = ExtResource("1_s6ugf")
 distance_between_planks = 1.5
 
@@ -51,6 +51,6 @@ path_u_distance = 1.0
 path_joined = false
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_2gqoj")
+multimesh = SubResource("MultiMesh_080bx")
 
 [connection signal="curve_changed" from="." to="." method="_on_curve_changed"]
