@@ -1,0 +1,98 @@
+extends Node3D
+
+var path_data = {}
+
+var type = "track"
+var building = load("res://assets/%s.tscn" % type).instantiate()
+var placing = false
+
+var rotation_state = 0
+var rotation_delta = 360/16
+
+var start_pos = Vector3.ZERO
+var end_pos = Vector3.ZERO
+var junction = false
+
+func build(camera, event: InputEvent, position, normal, shape_idx):
+	if event.is_action_pressed("left_click"):
+		var result = raycast()
+		if result.has("position"):
+			placing = true
+			start_pos = result.position
+			end_pos = start_pos + Vector3.FORWARD
+			building.position = start_pos
+			building = Track.new()
+			building.add_point(start_pos)
+			building.add_point(end_pos)
+			get_tree().get_root().get_node("World").add_child(building)
+			building.build_path()
+			updatePos()
+			updateRot()
+
+var curvature_rate = 100
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _input(event):
+	if event.is_action_released("left_click"):
+		match type:
+			"track":
+				building.path._add_markers()
+		building = load("res://assets/%s.tscn" % type).instantiate()
+		placing = false
+	
+	if event is InputEventMouseMotion:
+		if placing == false:
+			return
+		var result = raycast()
+		if result:
+			result.position.y += 1
+			end_pos = result.position
+			building.updatePath()
+			updatePos()
+			updateRot()
+
+	if event.is_action("scroll_up") || event.is_action("scroll_down"):
+		var scroll_input = Input.get_axis("scroll_up", "scroll_down")
+		if Input.is_key_pressed(KEY_CTRL):
+			curvature_rate -= scroll_input*10
+		else:
+			rotation_state += rotation_delta * scroll_input
+			rotation_state = wrapf(rotation_state, 0, 360)
+		updateRot()
+
+func updatePos():
+	match type:
+		"track":
+			building.set_point(start_pos, 0)
+			building.set_point(end_pos, building.get_point_count() - 1)
+		"trainStation":
+			building.position = end_pos
+
+func updateRot():
+	match type:
+		"track":
+			if junction == true:
+				var angle = deg_to_rad(rotation_state)
+				var offset_point = end_pos + Vector3(cos(angle)*curvature_rate, 0, sin(angle)*curvature_rate)
+				building.set_point_in(offset_point - start_pos, 0)
+				building.set_point_out(Vector3(cos(angle)*curvature_rate, 0, sin(angle)*curvature_rate), 1)
+		"trainStation":
+			building.rotation.y = deg_to_rad(rotation_state)
+
+func raycast():
+	var space_state = get_world_3d().direct_space_state
+	var mouse_position = get_viewport().get_mouse_position()
+	var params = PhysicsRayQueryParameters3D.new()
+	params.from = %Character/Camera3D.project_ray_origin(mouse_position)
+	params.to = params.from + %Character/Camera3D.project_ray_normal(mouse_position) * 1000
+	var result = space_state.intersect_ray(params)
+	result.position.y += 1
+	return result
+	
+func _on_inventory_item_selected(type):
+	self.type = type
+	building = load("res://assets/%s.tscn" % type).instantiate()
+
+func attachTrack(track, point):
+	building = track
+	track.curve.add_point(track.to_local(raycast().position), Vector3.ZERO, Vector3.ZERO, point)
+	placing = true

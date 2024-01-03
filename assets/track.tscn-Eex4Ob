@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://baxh1fjyports"]
+[gd_scene load_steps=5 format=3 uid="uid://baxh1fjyports"]
 
-[ext_resource type="Script" path="res://scripts/classes/Track.gd" id="1_og17s"]
-[ext_resource type="Script" path="res://scripts/trackPath.gd" id="2_epfv2"]
+[ext_resource type="Script" path="res://scripts/track.gd" id="1_fuwr5"]
 
 [sub_resource type="Curve3D" id="Curve3D_xxmcw"]
 resource_local_to_scene = true
@@ -21,16 +20,12 @@ instance_count = 13
 mesh = SubResource("BoxMesh_76rp0")
 buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 9.24683, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 7.75044, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 6.2504, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 4.75001, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 3.25003, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1.75, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0.250002, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -1.25002, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -2.75003, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -4.25006, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -5.74997, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -7.2503, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -8.75064)
 
-[node name="Track" type="Node3D" node_paths=PackedStringArray("path")]
-script = ExtResource("1_og17s")
-path = NodePath("Path")
-
-[node name="Path" type="Path3D" parent="." groups=["tracks"]]
+[node name="Track" type="Path3D" groups=["tracks"]]
 curve = SubResource("Curve3D_xxmcw")
-script = ExtResource("2_epfv2")
+script = ExtResource("1_fuwr5")
 distance_between_planks = 1.5
 
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Path"]
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
 snap = 1e-06
 polygon = PackedVector2Array(1, 0.1, 1, 0.3, 1.2, 0.3, 1.2, 0.1)
 mode = 2
@@ -44,7 +39,7 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 
-[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="Path"]
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="."]
 polygon = PackedVector2Array(-1, 0.1, -1, 0.3, -1.2, 0.3, -1.2, 0.1)
 mode = 2
 path_node = NodePath("..")
@@ -57,7 +52,7 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="Path"]
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
 multimesh = SubResource("MultiMesh_080bx")
 
-[connection signal="curve_changed" from="Path" to="Path" method="_on_curve_changed"]
+[connection signal="curve_changed" from="." to="." method="_on_curve_changed"]

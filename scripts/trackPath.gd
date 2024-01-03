@@ -14,11 +14,6 @@ func _process(delta):
 		_update_multimesh()
 
 		is_dirty = false
-	
-func _ready():
-	curve = Curve3D.new()
-	curve.add_point(Vector3(0, 0, 10))
-	curve.add_point(Vector3(0, 0, -10))
 
 func _update_multimesh():
 	var path_length: float = curve.get_baked_length()
@@ -46,30 +41,7 @@ func _update_multimesh():
 
 func _on_curve_changed():
 	is_dirty = true
-
-func _place(location: Vector3, rotation_degrees: Vector3, path = null, point = -1):
-	if path != null and point != -1:
-		path.curve.add_point(path.to_local(location), Vector3.ZERO, Vector3.ZERO, point)
-		var marker = path.add_marker(path.to_local(location))
-		marker.visible = true
-	else:
-		var building = self.duplicate()
-		building.position = location
-		building.rotation_degrees = rotation_degrees
-		building._add_markers()
-
-func _add_markers():
-	for i in range(0, curve.point_count):
-		add_marker(position + curve.get_point_position(i))
-		
-func add_marker(position):
-	var sprite = load("res://assets/marker.tscn").instantiate()
-	sprite.visible = false
-	sprite.position = position
-	add_child(sprite)
-	return sprite
 	
 func toggle_track_build_mode(build_mode):
 	for node in get_tree().get_nodes_in_group("track_markers"):
 		node.toggle_visibility(build_mode)
-

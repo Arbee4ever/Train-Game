@@ -6,20 +6,20 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_28t5a"]
 size = Vector3(10, 10, 10)
 
-[node name="marker" type="Node3D" groups=["track_markers"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0568085, 0.21051, -0.0958939)
-script = ExtResource("1_8gd1h")
-
-[node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -0.00813246, 0.036418, -0.0179329)
+[node name="marker" type="Sprite3D" groups=["track_markers"]]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 billboard = 1
 no_depth_test = true
 texture = ExtResource("1_k5d8b")
+script = ExtResource("1_8gd1h")
 
 [node name="Collider" type="Area3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.000813246, -0.0036418, 0.00179329)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0295696, -0.0364165, 0.0350323)
 shape = SubResource("BoxShape3D_28t5a")
 
+[connection signal="area_shape_entered" from="Collider" to="." method="_on_collider_area_shape_entered"]
+[connection signal="area_shape_exited" from="Collider" to="." method="_on_collider_area_shape_exited"]
 [connection signal="input_event" from="Collider" to="." method="_on_collider_input_event"]

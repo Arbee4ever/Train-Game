@@ -8,8 +8,8 @@ var buttonSize = 100
 signal item_selected(item)
 
 func _init():
-	items["Train Station"] = "res://assets/trainStation.tscn"
-	items["Track"] = "res://assets/track.tscn"
+	items["Train Station"] = "trainStation"
+	items["Track"] = "track"
 
 func _ready():
 	var i = 0

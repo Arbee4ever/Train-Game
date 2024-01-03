@@ -14,11 +14,12 @@ func _ready():
 		print("Generating chunk ", i+1)
 		var coords = Vector2(i%int(ceil(sqrt(chunkNum))), i/int(ceil(sqrt(chunkNum))))
 		coords.x *= chunkSize.x
-		coords.y *= chunkSize.x
+		coords.y *= chunkSize.y
 		noise.offset = Vector3(coords.x, coords.y, 0)
 		
 		var chunk = generate_chunk()
 		chunk.position = Vector3(coords.x, 0, coords.y)
+		chunk.get_child(0).input_event.connect(%Builder.build)
 		
 		var shaderMat = StandardMaterial3D.new()
 		var imageTexture = ImageTexture.create_from_image(noise.get_image(chunkSize.x, chunkSize.y, false, false, false))
@@ -34,6 +35,7 @@ func generate_chunk():
 	var plane_mesh = PlaneMesh.new()
 	plane_mesh.size = Vector2(chunkSize.x, chunkSize.y)
 	mesh_instance.mesh = plane_mesh
+#	TODO: Remove to reenable random terrain generation
 	mesh_instance.create_trimesh_collision()
 	return mesh_instance
 	plane_mesh.subdivide_depth = chunkSize.x
