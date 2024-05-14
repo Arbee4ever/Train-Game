@@ -17,22 +17,22 @@ func add_point(position: Vector3, index: int = -1):
 			points.push_front(newPoint)
 		else:
 			points.push_back(newPoint)
-		print(points.map(func(number): return number.position))
+		#print(points.map(func(number): return number.position))
 		
 func set_point(position: Vector3, index):
 	selectedPoint = index
 	points[index].position = position
-	var currentPoint: Point = get_point(index + 1)
-	var previousPoint: Point = get_point(index)
-	previousPoint.vector_out = previousPoint.vector_out.normalized() * previousPoint.position.distance_to(currentPoint.position)/2
-	currentPoint.vector_in = ((previousPoint.position + previousPoint.vector_out) - currentPoint.position)/2
-	currentPoint.vector_out = -currentPoint.vector_in
-	print("previousPoint pos ", previousPoint.position)
-	print("previousPoint vecIn ", previousPoint.vector_in)
-	print("previousPoint vecOut ", previousPoint.vector_out)
-	print("currentPoint pos ", currentPoint.position)
-	print("currentPoint vecIn ", currentPoint.vector_in)
-	print("currentPoint vecOut ", currentPoint.vector_out)
+	#var currentPoint: Point = get_point(index + 1)
+	#var previousPoint: Point = get_point(index)
+	#previousPoint.vector_out = previousPoint.vector_out.normalized() * previousPoint.position.distance_to(currentPoint.position)/2
+	#currentPoint.vector_in = ((previousPoint.position + previousPoint.vector_out) - currentPoint.position)/2
+	#currentPoint.vector_out = -currentPoint.vector_in
+	#print("previousPoint pos ", previousPoint.position)
+	#print("previousPoint vecIn ", previousPoint.vector_in)
+	#print("previousPoint vecOut ", previousPoint.vector_out)
+	#print("currentPoint pos ", currentPoint.position)
+	#print("currentPoint vecIn ", currentPoint.vector_in)
+	#print("currentPoint vecOut ", currentPoint.vector_out)
 	
 func remove_point(index):
 	points.remove_at(index)

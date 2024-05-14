@@ -2,7 +2,7 @@ extends Node3D
 
 var path_data = {}
 
-var type = "track"
+var type = "trainStation"
 var building = load("res://assets/%s.tscn" % type).instantiate()
 var placing = false
 
@@ -12,6 +12,8 @@ var rotation_delta = 360/16
 var start_pos = Vector3.ZERO
 var end_pos = Vector3.ZERO
 var curve = false
+
+@onready var noise: TerrainNoise = owner.get_node(".").noise
 
 func build(camera, event: InputEvent, position, normal, shape_idx):
 	if event.is_action_pressed("left_click"):
@@ -27,15 +29,24 @@ func build(camera, event: InputEvent, position, normal, shape_idx):
 				building.build_path()
 			"trainStation":
 				var track: Track = building.find_child("Track")
-				track.add_point(building.position + Vector3(0, 0, 10))
-				track.add_point(building.position + Vector3(0, 0, -10), 0)
+				track.position = Vector3.ZERO
+				var point1y = noise.get_noise(Vector2(building.position.x, building.position.z + 10))
+				var point2y = noise.get_noise(Vector2(building.position.x, building.position.z - 10))
+				track.add_point(track.position + Vector3(0, point1y - track.position.y, 10))
+				track.add_point(track.position + Vector3(0, point2y - track.position.y, -10))
 				track.build_path()
 		updatePos()
 		updateRot()
 
 var curvature_rate = 100
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _input(event):
+	if event.is_action_pressed("left_click"):
+		pass
+		#var target = raycast()
+		#if target:
+			#print(target.collider.get_parent())
+			#print(target)
+		
 	if event.is_action_released("left_click"):
 		if placing:
 			match type:
@@ -68,10 +79,16 @@ func _input(event):
 func updatePos():
 	match type:
 		"track":
-			building.set_point(building.to_local(end_pos), building.selectedPoint)
+			#building.set_point(building.to_.local(end_pos), building.selectedPoint)
 			building.update_path()
 		"trainStation":
 			building.position = end_pos
+			var track: Track = building.find_child("Track")
+			var point1y = noise.get_noise(Vector2(building.position.x, building.position.z + 10))
+			var point2y = noise.get_noise(Vector2(building.position.x, building.position.z - 10))
+			track.set_point(building.position + Vector3(0, point1y - building.position.y, 10), 0)
+			track.set_point(building.position + Vector3(0, point2y - building.position.y, -10), 1)
+			track.update_path()
 
 func updateRot():
 	match type:
@@ -79,7 +96,7 @@ func updateRot():
 			if curve == true:
 				var offset_point = -building.get_point(building.selectedPoint - 1).vector_in
 				print(offset_point)
-				building.set_point_out(offset_point, building.selectedPoint - 1)
+				building.set_point_out(building.position - offset_point, building.selectedPoint)
 				building.update_path()
 		"trainStation":
 			building.rotation.y = deg_to_rad(rotation_state)
@@ -90,7 +107,7 @@ func raycast():
 	var params = PhysicsRayQueryParameters3D.new()
 	params.from = %Character/Camera3D.project_ray_origin(mouse_position)
 	params.to = params.from + %Character/Camera3D.project_ray_normal(mouse_position) * 1000
-	var result = space_state.intersect_ray(params)
+	var result := space_state.intersect_ray(params)
 	return result
 	
 func _on_inventory_item_selected(type):
