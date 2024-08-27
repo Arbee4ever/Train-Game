@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="TrackNetwork" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/Point.gd" id="1_1iton"]
+[ext_resource type="Script" path="res://scripts/Track.gd" id="2_2ju47"]
+[ext_resource type="Script" path="res://scripts/TrackNetwork.gd" id="3_0dl3i"]
+
+[sub_resource type="Resource" id="Resource_8tcvo"]
+script = ExtResource("1_1iton")
+position = Vector3(100, 100, 100)
+connections = [null]
+
+[sub_resource type="Resource" id="Resource_n35l3"]
+script = ExtResource("2_2ju47")
+start = null
+end = SubResource("Resource_8tcvo")
+type = "test"
+properties = {}
+
+[sub_resource type="Resource" id="Resource_pwhap"]
+script = ExtResource("1_1iton")
+position = Vector3(0, 0, 0)
+connections = [SubResource("Resource_n35l3")]
+
+[resource]
+script = ExtResource("3_0dl3i")
+points = [SubResource("Resource_pwhap"), SubResource("Resource_8tcvo")]
+tracks = [SubResource("Resource_n35l3")]
