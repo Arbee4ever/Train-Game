@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="TrackNetwork" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/Point.gd" id="1_v8x0c"]
+[ext_resource type="Script" path="res://scripts/Track.gd" id="2_t51aj"]
+[ext_resource type="Script" path="res://scripts/TrackNetwork.gd" id="3_a4pvy"]
+
+[sub_resource type="Resource" id="Resource_gkjym"]
+script = ExtResource("1_v8x0c")
+position = Vector3(-11.1711, 0, -32.8925)
+connections = []
+vector_in = Vector3(38.3685, 1.52588e-05, -43.6275)
+vector_out = Vector3(-38.3685, -1.52588e-05, 43.6275)
+
+[sub_resource type="Resource" id="Resource_t1jhf"]
+script = ExtResource("2_t51aj")
+connection = SubResource("Resource_gkjym")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_5uwet"]
+script = ExtResource("1_v8x0c")
+position = Vector3(68.7286, 0, -71.909)
+connections = [SubResource("Resource_t1jhf")]
+vector_in = Vector3(-9.92345, 1.52588e-05, 86.3948)
+vector_out = Vector3(-41.5311, 1.52588e-05, -4.61105)
+
+[sub_resource type="Resource" id="Resource_8f0o8"]
+script = ExtResource("2_t51aj")
+connection = SubResource("Resource_5uwet")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_mbk4y"]
+script = ExtResource("1_v8x0c")
+position = Vector3(39.3765, 1.52588e-05, 77.5496)
+connections = [SubResource("Resource_8f0o8")]
+vector_in = Vector3(-40.8304, -1.52588e-05, 1.04141)
+vector_out = Vector3(19.4286, 0, -63.0639)
+
+[sub_resource type="Resource" id="Resource_1ifk2"]
+script = ExtResource("2_t51aj")
+connection = SubResource("Resource_mbk4y")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_mpiul"]
+script = ExtResource("1_v8x0c")
+position = Vector3(-51.1574, 0, 63.762)
+connections = [SubResource("Resource_1ifk2")]
+vector_in = Vector3(-31.3292, 1.52588e-05, -78.4295)
+vector_out = Vector3(49.7036, 0, 14.829)
+
+[sub_resource type="Resource" id="Resource_m3ah6"]
+script = ExtResource("2_t51aj")
+connection = SubResource("Resource_mpiul")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_67wyc"]
+script = ExtResource("1_v8x0c")
+position = Vector3(-54.7147, 1.52588e-05, -75.2889)
+connections = [SubResource("Resource_m3ah6")]
+vector_in = Vector3(0, 0, 0)
+vector_out = Vector3(-27.772, 0, 60.6213)
+
+[resource]
+script = ExtResource("3_a4pvy")
+points = [SubResource("Resource_67wyc"), SubResource("Resource_mpiul"), SubResource("Resource_mbk4y"), SubResource("Resource_5uwet"), SubResource("Resource_gkjym")]
+tracks = [SubResource("Resource_m3ah6"), SubResource("Resource_1ifk2"), SubResource("Resource_8f0o8"), SubResource("Resource_t1jhf")]

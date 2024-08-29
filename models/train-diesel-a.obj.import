@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://br8u5q30bcrc1"
+path="res://.godot/imported/train-diesel-a.obj-4685b81f0117df7d16374ddda37f8fef.mesh"
+
+[deps]
+
+files=["res://.godot/imported/train-diesel-a.obj-4685b81f0117df7d16374ddda37f8fef.mesh"]
+
+source_file="res://models/train-diesel-a.obj"
+dest_files=["res://.godot/imported/train-diesel-a.obj-4685b81f0117df7d16374ddda37f8fef.mesh", "res://.godot/imported/train-diesel-a.obj-4685b81f0117df7d16374ddda37f8fef.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(3, 3, 3)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
