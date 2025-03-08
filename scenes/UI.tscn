@@ -1,0 +1,86 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1vfwxfn4pia5"]
+
+[ext_resource type="Script" uid="uid://djfqkrkt40bo6" path="res://scripts/ButtonManager.gd" id="1_vodte"]
+[ext_resource type="Script" uid="uid://dvgfue3qvn7ft" path="res://scenes/cameraFollow.gd" id="2_w84ga"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_whkkd"]
+viewport_path = NodePath("VBoxContainer2/SubViewportContainer/SubViewport")
+
+[node name="Ui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_vodte")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 1
+
+[node name="SaveButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Create Save"
+
+[node name="LoadButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Load Save"
+
+[node name="TrainButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Add Train"
+
+[node name="TrainToggleButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Stop/Start Train"
+
+[node name="ClearButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Clear Track"
+
+[node name="MarkerToggleButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Toggle Markers"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -240.0
+offset_bottom = 139.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer2/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(480, 270)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="VBoxContainer2/SubViewportContainer/SubViewport"]
+current = true
+script = ExtResource("2_w84ga")
+
+[node name="TrainButton" type="TextureButton" parent="VBoxContainer2"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture_normal = SubResource("ViewportTexture_whkkd")
+stretch_mode = 0
+
+[connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TrainButton" to="." method="_on_train_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TrainToggleButton" to="." method="_on_train_pause_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClearButton" to="." method="_on_clear_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarkerToggleButton" to="." method="_on_marker_toggle_button_pressed"]

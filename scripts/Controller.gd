@@ -1,84 +1,131 @@
 extends Node3D
 
-signal action_pressed(position)
-
 var network := TrackNetwork.new()
 @onready var path: Path3D = _get_path()
+@onready var selectionTrack: Path3D = $SelectionTrack
 
 func _ready() -> void:
 	network.point_added.connect(point_added)
 	network.point_changed.connect(point_changed)
-	network.track_added.connect(track_added)
+	#network.track_added.connect(track_added)
 
 enum building_state {POINT, CONTROL}
 var state = building_state.POINT
-var point = null
-var line1 = null
-var line2 = null
-var line3 = null
-func _on_ground_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if line1 != null and point != null:
-		if line3 != null:
-			line3.queue_free()
-			line3 = null
-		line3 = await Draw3D.line(point.position + point.vector_out, event_position, Color.RED)
-	if line1 == null and point != null:
-		if line2 != null:
-			line2.queue_free()
-			line2 = null
-		line2 = await Draw3D.line(point.position, event_position, Color.BLACK)
-	if event.is_action_pressed("action") and state == building_state.POINT:
-		point = network.add_point(event_position)
-		if line1 != null:
-			line1.queue_free()
-			line1 = null
-		state = building_state.CONTROL
-	elif event.is_action_pressed("action") and state == building_state.CONTROL:
-		network.set_point_out(point, event_position - point.position)
-		line1 = await Draw3D.line(point.position, point.position + point.vector_out, Color.BLACK)
-		state = building_state.POINT
+var prevPoint = null
+var selectedPoint: Point = null:
+	set(newPoint):
+		if selectedPoint != null:
+			selectedPoint.on_move.disconnect(selectionTrack.update)
+			selectedPoint.on_in_change.disconnect(selectionTrack.update)
+			selectedPoint.on_out_change.disconnect(selectionTrack.update)
+		selectedPoint = newPoint
+		selectedPoint.on_move.connect(selectionTrack.update)
+		selectedPoint.on_in_change.connect(selectionTrack.update)
+		selectedPoint.on_out_change.connect(selectionTrack.update)
+var pointLine = null
+var controlLine = null
+func _on_ground_input_event(camera: Node, event: InputEvent, eventPosition: Vector3, normal: Vector3, shapeIdx: int) -> void:
+	if selectedPoint == null: 
+		selectedPoint = Point.new(eventPosition)
+	selectedPoint = calculate_vectors(selectedPoint, prevPoint, eventPosition)
+	if event is InputEventMouseMotion:
+		mouse_move(eventPosition)
+	elif event.is_action_pressed("action"):
+		build(eventPosition)
 		
-func point_added(point):
-	var marker = preload("res://scenes/Point.tscn").instantiate()
-	marker.position = point.position
-	add_child(marker)
-	var point_count = len(network.points)
-	if point_count > 1:
-		network.add_track(network.points[point_count - 2], network.points[point_count - 1])
+func mouse_move(eventPosition: Vector3):
+	match state:
+		building_state.POINT:
+			if pointLine != null:
+				pointLine.queue_free()
+				pointLine = null
+			selectedPoint.position = eventPosition
+			if prevPoint != null:
+				pointLine = await Draw3D.line(prevPoint.position + prevPoint.vector_out, eventPosition, Color.RED)
+		building_state.CONTROL:
+			if controlLine != null:
+				controlLine.queue_free()
+				controlLine = null
+			if prevPoint != null:
+				var newVector: Vector3 = eventPosition - selectedPoint.position
+				newVector = newVector.project(-selectedPoint.vector_in.normalized())
+				if round(newVector.normalized().dot(selectedPoint.vector_in.normalized())) == -1:
+					controlLine = await Draw3D.line(selectedPoint.position, selectedPoint.position + newVector, Color.BLACK)
+			else:
+				controlLine = await Draw3D.line(selectedPoint.position, eventPosition, Color.BLACK)
+				
+func build(eventPosition: Vector3):
+	if controlLine != null:
+		controlLine.queue_free()
+		controlLine = null
+	match state:
+		building_state.POINT:
+			add_marker(selectedPoint)
+			selectedPoint = network.add_point(selectedPoint, prevPoint)
+			state = building_state.CONTROL
+		building_state.CONTROL:
+			if len(network.points) > 1:
+				var track = selectionTrack.render()
+				path.add_child(track)
+			controlLine = await Draw3D.line(selectedPoint.position, selectedPoint.position + selectedPoint.vector_out, Color.BLACK)
+			prevPoint = selectedPoint
+			selectedPoint = network.add_point(Point.new(eventPosition), prevPoint)
+			state = building_state.POINT
+			
+func calculate_vectors(point: Point, prevPoint: Point, eventPosition: Vector3):
+	match state:
+		building_state.POINT:
+			if prevPoint != null:
+				selectedPoint.vector_in = (prevPoint.position + prevPoint.vector_out) - eventPosition
+		building_state.CONTROL:
+			if prevPoint != null:
+				var newVector: Vector3 = eventPosition - selectedPoint.position
+				newVector = newVector.project(-selectedPoint.vector_in.normalized())
+				selectedPoint.vector_out = newVector
+			else:
+				selectedPoint.vector_out = eventPosition - selectedPoint.position
+	return point
 		
-func point_changed(point):
-	var id = network.get_point_id(point)
+func point_added(point: Point):
+	var id = point.id
+	path.curve.add_point(point.position)
+	path.curve.set_point_in(id, point.vector_in)
+	path.curve.set_point_out(id, point.vector_out)
+		
+func point_changed(point: Point):
+	var id = point.id
 	path.curve.set_point_in(id, point.vector_in)
 	path.curve.set_point_out(id, point.vector_out)
 	path.curve.set_point_position(id, point.position)
 
-func track_added(track):
-	var point_count = len(network.points)
-	if point_count == 2:
-		var newPoint = network.points[point_count - 2]
-		path.curve.add_point(newPoint.position, newPoint.vector_in, newPoint.vector_out)
-	var newPoint = network.points[point_count - 1]
-	path.curve.add_point(newPoint.position, newPoint.vector_in, newPoint.vector_out)
-	
 func rebuild_path():
 	path.curve.clear_points()
-	for point in get_tree().get_nodes_in_group("points"):
-		point.queue_free()
+	get_tree().call_group("markers", "remove")
 	for point: Point in network.points:
 		path.curve.add_point(point.position, point.vector_in, point.vector_out)
-		var marker = preload("res://scenes/Point.tscn").instantiate()
-		marker.position = point.position
-		add_child(marker)
+		add_marker(point)
 
 func _get_path() -> Path3D:
 	if path == null:
-		path = preload("res://scenes/Track.tscn").instantiate()
-		path.curve.clear_points()
+		path = load("res://scenes/Track.tscn").instantiate()
 		add_child(path)
 	return path
 
 func add_train():
-	path.add_child(preload("res://scenes/Train.tscn").instantiate())
+	var train = preload("res://scenes/Train.tscn").instantiate()
+	path.add_child(train)
+	
+func add_marker(point: Point):
+	var marker = preload("res://scenes/Marker.tscn").instantiate()
+	marker.point = point
+	marker.input_event.connect(marker_clicked)
+	%Markers.add_child(marker)
+	return marker
+	
+func marker_clicked(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int, point: Point):
+	if event.is_action_pressed("action"):
+		selectedPoint = point
+	pass
 	
 var debug_lines = []
 func _input(event: InputEvent) -> void:

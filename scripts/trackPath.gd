@@ -1,5 +1,5 @@
-@tool
-extends Path3D
+#Code from https://www.youtube.com/watch?v=Gfpnxg-jne4
+extends MultiMeshInstance3D
 
 @export var distance_between_planks = 1.0:
 	set(value):
@@ -8,8 +8,11 @@ extends Path3D
 	
 var is_dirty = false
 
+@onready var path = get_parent()
+ 
 func _ready() -> void:
-	curve_changed.connect(_on_curve_changed)
+	clear_points()
+	path.curve_changed.connect(_on_curve_changed)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -19,32 +22,32 @@ func _process(delta):
 		is_dirty = false
 
 func _update_multimesh():
-	var path_length: float = curve.get_baked_length()
+	var path_length: float = path.curve.get_baked_length()
 	var count = floor(path_length / distance_between_planks)
 
-	var mm: MultiMesh = $MultiMeshInstance3D.multimesh
+	var mm: MultiMesh = multimesh
 	mm.instance_count = count
 	var offset = distance_between_planks/2.0
 
 	for i in range(0, count):
-		var curve_distance = offset + distance_between_planks * i
-		var position = curve.sample_baked(curve_distance, true)
+		var _curve_distance = offset + distance_between_planks * i
+		var _position = path.curve.sample_baked(_curve_distance, true)
 
-		var basis = Basis()
+		var _basis = Basis()
 		
-		var up = curve.sample_baked_up_vector(curve_distance, true)
-		var forward = position.direction_to(curve.sample_baked(curve_distance + 0.1, true))
-
-		basis.y = up
-		basis.x = forward.cross(up).normalized()
-		basis.z = -forward
+		var up = Vector3.UP
+		var _forward = _position.direction_to(path.curve.sample_baked(_curve_distance + 0.1, true))
 		
-		var transform = Transform3D(basis, position)
-		mm.set_instance_transform(i, transform)
+		_basis.y = up
+		_basis.x = _forward.cross(up)
+		_basis.z = -_forward
+		
+		var _transform = Transform3D(_basis, _position)
+		mm.set_instance_transform(i, _transform)
 
 func _on_curve_changed():
 	is_dirty = true
 	
-func toggle_track_build_mode(build_mode):
-	for node in get_tree().get_nodes_in_group("track_markers"):
-		node.toggle_visibility(build_mode)
+func clear_points():
+	path.curve.clear_points()
+	is_dirty = true

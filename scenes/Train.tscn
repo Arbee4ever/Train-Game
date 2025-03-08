@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c2h3mwishl2lw"]
 
-[ext_resource type="Script" path="res://scenes/Train.gd" id="1_pkfrk"]
+[ext_resource type="Script" uid="uid://bmfvvvdiscuh7" path="res://scenes/Train.gd" id="1_pkfrk"]
 [ext_resource type="ArrayMesh" uid="uid://djkbvjpfhotlg" path="res://models/train-locomotive-b.obj" id="1_yeng2"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cs1cc"]
@@ -17,5 +17,8 @@ mesh = ExtResource("1_yeng2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mesh/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_cs1cc")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 3.5, 0)
 
 [connection signal="input_event" from="Mesh/StaticBody3D" to="." method="_on_click"]

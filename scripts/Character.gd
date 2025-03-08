@@ -1,17 +1,20 @@
 class_name Character
 extends CharacterBody3D
 
+signal on_move()
+
 @export_range(0.0, 1.0) var sensitivity: float = 0.25
 @export var _vel_multiplier = 25
 var locked = false
 
 # Mouse state
-var _mouse_position = Vector2(0.0, 0.0)
+var _mouse_position = Vector2.ZERO
+var _joypad_vector = Vector2.ZERO
 var _total_pitch = 0.0
 
 # Movement state
-var _direction = Vector3(0.0, 0.0, 0.0)
-var _velocity = Vector3(0.0, 0.0, 0.0)
+var _direction = Vector3.ZERO
+var _velocity = Vector3.ZERO
 var _acceleration = 30
 var _deceleration = -10
 
@@ -19,6 +22,9 @@ func _input(event):
 	# Receives mouse motion
 	if event is InputEventMouseMotion:
 		_mouse_position = event.relative
+	elif event is InputEventJoypadMotion:
+		_joypad_vector = Input.get_vector("look_left", "look_right", "look_up", "look_down")
+		_joypad_vector *= sensitivity * 20
 	
 	# Receives mouse button input
 	if event is InputEventMouseButton:
@@ -29,10 +35,17 @@ func _input(event):
 				_vel_multiplier = clamp(_vel_multiplier * 1.1, 0.2, 500)
 			MOUSE_BUTTON_WHEEL_DOWN: # Decereases max velocity
 				_vel_multiplier = clamp(_vel_multiplier / 1.1, 0.2, 500)
+	
+	if event is InputEventJoypadButton:
+		if event.is_action("camera_speed_up"):
+			_vel_multiplier = clamp(_vel_multiplier * 1.1, 0.2, 500)
+		if event.is_action("camera_speed_down"):
+			_vel_multiplier = clamp(_vel_multiplier / 1.1, 0.2, 500)
 
 # Updates mouselook and movement every frame
 func _process(delta):
 	_update_mouselook()
+	_update_joypadlook()
 	_update_movement(delta)
 
 # Updates camera movement
@@ -48,6 +61,9 @@ func _update_movement(delta):
 	var offset = _direction.normalized() * _acceleration * _vel_multiplier * delta \
 		+ _velocity.normalized() * _deceleration * _vel_multiplier * delta
 	
+	if _direction == Vector3.ZERO:
+		return
+	
 	# Checks if we should bother translating the camera
 	if _direction == Vector3.ZERO and offset.length_squared() > _velocity.length_squared():
 		# Sets the velocity to 0 to prevent jittering due to imperfect deceleration
@@ -62,6 +78,7 @@ func _update_movement(delta):
 		velocity = velocity.rotated(Vector3(1, 0, 0), get_rotation().x)
 		velocity = velocity.rotated(Vector3(0, 1, 0), get_rotation().y)
 		move_and_slide()
+		on_move.emit()
 
 # Updates mouse look 
 func _update_mouselook():
@@ -70,7 +87,7 @@ func _update_mouselook():
 		_mouse_position *= sensitivity
 		var yaw = _mouse_position.x
 		var pitch = _mouse_position.y
-		_mouse_position = Vector2(0, 0)
+		_mouse_position = Vector2.ZERO
 		
 		# Prevents looking up/down too far
 		pitch = clamp(pitch, -90 - _total_pitch, 90 - _total_pitch)
@@ -78,3 +95,17 @@ func _update_mouselook():
 	
 		rotate_y(deg_to_rad(-yaw))
 		rotate_object_local(Vector3(1,0,0), deg_to_rad(-pitch))
+		on_move.emit()
+	
+func _update_joypadlook():
+	if _joypad_vector != Vector2.ZERO:
+		var yaw = _joypad_vector.x
+		var pitch = _joypad_vector.y
+		
+		# Prevents looking up/down too far
+		pitch = clamp(pitch, -90 - _total_pitch, 90 - _total_pitch)
+		_total_pitch += pitch
+	
+		rotate_y(deg_to_rad(-yaw))
+		rotate_object_local(Vector3(1,0,0), deg_to_rad(-pitch))
+		on_move.emit()

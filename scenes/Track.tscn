@@ -1,69 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4sldsbpv32df"]
+[gd_scene load_steps=6 format=3 uid="uid://c4sldsbpv32df"]
 
-[ext_resource type="Script" path="res://scripts/trackPath.gd" id="1_7ptxu"]
+[ext_resource type="Script" uid="uid://cr6is5vh6cg70" path="res://scripts/trackPath.gd" id="1_7ptxu"]
 
 [sub_resource type="Curve3D" id="Curve3D_j5agx"]
 resource_local_to_scene = true
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, -10),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
 
-[sub_resource type="BoxMesh" id="BoxMesh_76rp0"]
-size = Vector3(3, 0.1, 0.25)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tiocc"]
+albedo_color = Color(0.318173, 0.21155, 0.111755, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_q3w7u"]
+material = SubResource("StandardMaterial3D_tiocc")
+size = Vector3(3, 0.2, 0.25)
 
 [sub_resource type="MultiMesh" id="MultiMesh_5be78"]
 resource_local_to_scene = true
 transform_format = 1
-instance_count = 20
-mesh = SubResource("BoxMesh_76rp0")
-buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 9.50038, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 8.50061, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 7.50042, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 6.50014, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 5.49562, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 4.50006, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 3.50005, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2.50004, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1.50001, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0.500006, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.500006, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -1.50001, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -2.50004, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -3.50005, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -4.50006, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -5.49562, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -6.50014, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -7.50042, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -8.50061, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -9.50038)
+mesh = SubResource("BoxMesh_q3w7u")
 
 [node name="Track" type="Path3D" groups=["tracks"]]
 curve = SubResource("Curve3D_j5agx")
-script = ExtResource("1_7ptxu")
 
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
-polygon = PackedVector2Array(1, 0.1, 1, 0.3, 1.2, 0.3, 1.2, 0.1)
-mode = 2
-path_node = NodePath("..")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 1
-path_local = true
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-
-[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="."]
-polygon = PackedVector2Array(-1, 0.1, -1, 0.3, -1.2, 0.3, -1.2, 0.1)
-mode = 2
-path_node = NodePath("..")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 1
-path_local = true
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
+[node name="Sleepers" type="MultiMeshInstance3D" parent="."]
 multimesh = SubResource("MultiMesh_5be78")
-
-[node name="CSGPolygon3D3" type="CSGPolygon3D" parent="."]
-layers = 0
-use_collision = true
-polygon = PackedVector2Array(-2, 0.1, -2, 0.3, 2, 0.3, 2, 0.1)
-mode = 2
-path_node = NodePath("..")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 1
-path_local = true
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
+script = ExtResource("1_7ptxu")

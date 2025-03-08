@@ -8,39 +8,34 @@ signal track_added(track)
 @export var points = []
 @export var tracks = []
 
-func add_point(position: Vector3) -> Point:
+func add_point(point: Point, connected_to: Point = null) -> Point:
+	point.commit()
 	var point_count = len(points)
-	var point = Point.new()
-	point.position = position
-	if point_count >= 1:
-		var prevPoint = points[point_count - 1]
-		if prevPoint.vector_out == Vector3.ZERO:
-			point.vector_in = (prevPoint.position - point.position).normalized() * 50
-		else:
-			point.vector_in = -(point.position - (prevPoint.position + prevPoint.vector_out))
-		point.vector_out = -point.vector_in
+	if connected_to != null:
+		point.connections.append(add_track(connected_to, point))
+	point.id = point_count
+	point.on_move.connect(on_move_point)
+	point.on_in_change.connect(on_set_point_in)
+	point.on_out_change.connect(on_set_point_out)
 	points.append(point)
 	point_added.emit(point)
 	return point
 	
-func set_point_out(point: Point, vector_out: Vector3) -> void:
-	point.vector_out = vector_out
+func on_move_point(point: Point) -> void:
 	point_changed.emit(point)
 	
-func set_point_in(point: Point, vector_in: Vector3) -> void:
-	point.vector_in = vector_in
-	point_changed.emit(point)
-
-func move_point(point: Point, position: Vector3) -> void:
-	point.position = position
+func on_set_point_in(point: Point) -> void:
 	point_changed.emit(point)
 	
-func get_point_id(point: Point) -> int:
-	return points.find(point)
+func on_set_point_out(point: Point) -> void:
+	point_changed.emit(point)
 
-func add_track(start_point: Point, end_point: Point) -> void:
+func add_track(start_point: Point, end_point: Point) -> Track:
 	var track = Track.new()
 	start_point.connections.append(track)
-	track.connection = end_point
+	end_point.connections.append(track)
+	track.start = start_point
+	track.end = end_point
 	tracks.append(track)
 	track_added.emit(track)
+	return track

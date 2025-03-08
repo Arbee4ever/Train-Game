@@ -1,69 +1,83 @@
-[gd_resource type="Resource" script_class="TrackNetwork" load_steps=13 format=3]
+[gd_resource type="Resource" script_class="TrackNetwork" load_steps=15 format=3 uid="uid://7fjwert0uh8g"]
 
-[ext_resource type="Script" path="res://scripts/Point.gd" id="1_v8x0c"]
-[ext_resource type="Script" path="res://scripts/Track.gd" id="2_t51aj"]
-[ext_resource type="Script" path="res://scripts/TrackNetwork.gd" id="3_a4pvy"]
+[ext_resource type="Script" uid="uid://b4632q0b1lx5k" path="res://scripts/Point.gd" id="1_cxa27"]
+[ext_resource type="Script" uid="uid://lrl4ouo2ify5" path="res://scripts/TrackNetwork.gd" id="1_u0kgh"]
+[ext_resource type="Script" uid="uid://fhkdrr5euee5" path="res://scripts/Track.gd" id="2_n4tkr"]
 
-[sub_resource type="Resource" id="Resource_gkjym"]
-script = ExtResource("1_v8x0c")
-position = Vector3(-11.1711, 0, -32.8925)
-connections = []
-vector_in = Vector3(38.3685, 1.52588e-05, -43.6275)
-vector_out = Vector3(-38.3685, -1.52588e-05, 43.6275)
-
-[sub_resource type="Resource" id="Resource_t1jhf"]
-script = ExtResource("2_t51aj")
-connection = SubResource("Resource_gkjym")
+[sub_resource type="Resource" id="Resource_pkvqc"]
+script = ExtResource("2_n4tkr")
 type = ""
 properties = {}
 
-[sub_resource type="Resource" id="Resource_5uwet"]
-script = ExtResource("1_v8x0c")
-position = Vector3(68.7286, 0, -71.909)
-connections = [SubResource("Resource_t1jhf")]
-vector_in = Vector3(-9.92345, 1.52588e-05, 86.3948)
-vector_out = Vector3(-41.5311, 1.52588e-05, -4.61105)
-
-[sub_resource type="Resource" id="Resource_8f0o8"]
-script = ExtResource("2_t51aj")
-connection = SubResource("Resource_5uwet")
-type = ""
-properties = {}
-
-[sub_resource type="Resource" id="Resource_mbk4y"]
-script = ExtResource("1_v8x0c")
-position = Vector3(39.3765, 1.52588e-05, 77.5496)
-connections = [SubResource("Resource_8f0o8")]
-vector_in = Vector3(-40.8304, -1.52588e-05, 1.04141)
-vector_out = Vector3(19.4286, 0, -63.0639)
-
-[sub_resource type="Resource" id="Resource_1ifk2"]
-script = ExtResource("2_t51aj")
-connection = SubResource("Resource_mbk4y")
-type = ""
-properties = {}
-
-[sub_resource type="Resource" id="Resource_mpiul"]
-script = ExtResource("1_v8x0c")
-position = Vector3(-51.1574, 0, 63.762)
-connections = [SubResource("Resource_1ifk2")]
-vector_in = Vector3(-31.3292, 1.52588e-05, -78.4295)
-vector_out = Vector3(49.7036, 0, 14.829)
-
-[sub_resource type="Resource" id="Resource_m3ah6"]
-script = ExtResource("2_t51aj")
-connection = SubResource("Resource_mpiul")
-type = ""
-properties = {}
-
-[sub_resource type="Resource" id="Resource_67wyc"]
-script = ExtResource("1_v8x0c")
-position = Vector3(-54.7147, 1.52588e-05, -75.2889)
-connections = [SubResource("Resource_m3ah6")]
+[sub_resource type="Resource" id="Resource_6rcpy"]
+script = ExtResource("1_cxa27")
+id = 0
+position = Vector3(-351.654, -1.52588e-05, 270.223)
+connections = Array[ExtResource("2_n4tkr")]([SubResource("Resource_pkvqc")])
 vector_in = Vector3(0, 0, 0)
-vector_out = Vector3(-27.772, 0, 60.6213)
+vector_out = Vector3(397.039, 3.05176e-05, -115.107)
+
+[sub_resource type="Resource" id="Resource_4oxwd"]
+script = ExtResource("2_n4tkr")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_holpt"]
+script = ExtResource("1_cxa27")
+id = 1
+position = Vector3(252.075, -1.52588e-05, -35.7022)
+connections = Array[ExtResource("2_n4tkr")]([SubResource("Resource_4oxwd")])
+vector_in = Vector3(-206.689, 3.05176e-05, 190.819)
+vector_out = Vector3(247.305, -3.65144e-05, -228.316)
+
+[sub_resource type="Resource" id="Resource_pbtkm"]
+script = ExtResource("2_n4tkr")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_23lf6"]
+script = ExtResource("1_cxa27")
+id = 2
+position = Vector3(653.72, 0, -461.025)
+connections = Array[ExtResource("2_n4tkr")]([SubResource("Resource_pbtkm")])
+vector_in = Vector3(-154.341, -5.17732e-05, 197.007)
+vector_out = Vector3(115.275, 3.86687e-05, -147.142)
+
+[sub_resource type="Resource" id="Resource_lgprw"]
+script = ExtResource("2_n4tkr")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_oessi"]
+script = ExtResource("1_cxa27")
+id = 3
+position = Vector3(524.471, 1.52588e-05, -803.272)
+connections = Array[ExtResource("2_n4tkr")]([SubResource("Resource_lgprw")])
+vector_in = Vector3(244.525, 2.34099e-05, 195.105)
+vector_out = Vector3(-119.276, -1.14191e-05, -95.17)
+
+[sub_resource type="Resource" id="Resource_3s5ey"]
+script = ExtResource("2_n4tkr")
+type = ""
+properties = {}
+
+[sub_resource type="Resource" id="Resource_11emp"]
+script = ExtResource("1_cxa27")
+id = 4
+position = Vector3(-501.626, -1.52588e-05, -509.934)
+connections = Array[ExtResource("2_n4tkr")]([SubResource("Resource_3s5ey")])
+vector_in = Vector3(906.821, 1.90985e-05, -388.508)
+vector_out = Vector3(-236.842, -4.9881e-06, 101.47)
+
+[sub_resource type="Resource" id="Resource_sg4g8"]
+script = ExtResource("1_cxa27")
+id = 5
+position = Vector3(-516.508, -1.52588e-05, -46.991)
+connections = Array[ExtResource("2_n4tkr")]([])
+vector_in = Vector3(-221.96, -4.9881e-06, -361.473)
+vector_out = Vector3(221.96, 4.9881e-06, 361.473)
 
 [resource]
-script = ExtResource("3_a4pvy")
-points = [SubResource("Resource_67wyc"), SubResource("Resource_mpiul"), SubResource("Resource_mbk4y"), SubResource("Resource_5uwet"), SubResource("Resource_gkjym")]
-tracks = [SubResource("Resource_m3ah6"), SubResource("Resource_1ifk2"), SubResource("Resource_8f0o8"), SubResource("Resource_t1jhf")]
+script = ExtResource("1_u0kgh")
+points = [SubResource("Resource_6rcpy"), SubResource("Resource_holpt"), SubResource("Resource_23lf6"), SubResource("Resource_oessi"), SubResource("Resource_11emp"), SubResource("Resource_sg4g8")]
+tracks = [SubResource("Resource_pkvqc"), SubResource("Resource_4oxwd"), SubResource("Resource_pbtkm"), SubResource("Resource_lgprw"), SubResource("Resource_3s5ey")]
